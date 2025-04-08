@@ -27,7 +27,3 @@ jobs:
       run: |
         docker tag my-ml-app:latest hrk84ya/my-ml-app:latest
         docker push hrk84ya/my-ml-app:latest
-
-    - name: Deploy Application (Optional Step for Kubernetes)
-      run: |
-        kubectl apply -f deployment.yaml
