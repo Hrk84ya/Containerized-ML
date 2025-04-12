@@ -10,25 +10,25 @@ n_samples = 1000
 
 # Features: [square footage, number of bedrooms, number of bathrooms, year built]
 X = np.array([
-    np.random.uniform(1000, 5000, n_samples),  # Square footage
-    np.random.randint(1, 6, n_samples),        # Bedrooms
-    np.random.randint(1, 4, n_samples),        # Bathrooms
-    np.random.randint(1960, 2023, n_samples)   # Year built
+    np.random.uniform(1000, 5000, n_samples),  
+    np.random.randint(1, 6, n_samples),        
+    np.random.randint(1, 4, n_samples),        
+    np.random.randint(1960, 2023, n_samples)
 ])
 
 # Generate target prices with some noise
-base_price = 200000  # Base price
-price_per_sqft = 100  # Price per square foot
-price_per_bedroom = 25000  # Price per bedroom
-price_per_bathroom = 35000  # Price per bathroom
-price_per_year = 1000  # Price per year since 1960
+base_price = 200000 
+price_per_sqft = 100  
+price_per_bedroom = 25000  
+price_per_bathroom = 35000  
+price_per_year = 1000  
 
 y = (base_price + 
      X[0] * price_per_sqft + 
      X[1] * price_per_bedroom + 
      X[2] * price_per_bathroom + 
      (X[3] - 1960) * price_per_year +
-     np.random.normal(0, 25000, n_samples))  # Add some noise
+     np.random.normal(0, 25000, n_samples))
 
 # Reshape X for sklearn
 X = X.T
