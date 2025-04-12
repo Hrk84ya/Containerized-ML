@@ -5,6 +5,7 @@ pipeline {
         DOCKER_IMAGE = 'containerized-ml'
         DOCKER_TAG = "${BUILD_NUMBER}"
         PYTHON_PATH = '/usr/local/bin/python3'
+        DOCKER_HOST = 'unix:///var/run/docker.sock'
     }
     
     stages {
@@ -39,9 +40,15 @@ pipeline {
                         exit 1
                     fi
                     
-                    # Build the image
+                    # Check Dockerfile existence
+                    if [ ! -f "Dockerfile" ]; then
+                        echo "Dockerfile not found in the workspace"
+                        exit 1
+                    fi
+                    
+                    # Build the image with detailed output
                     echo "Building Docker image..."
-                    docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+                    DOCKER_HOST=${DOCKER_HOST} docker build --progress=plain -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
                 '''
             }
         }
