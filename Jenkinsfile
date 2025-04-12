@@ -5,6 +5,7 @@ pipeline {
         DOCKER_IMAGE = 'containerized-ml'
         DOCKER_TAG = "${BUILD_NUMBER}"
         PYTHON_PATH = '/usr/local/bin/python3'
+        DOCKER_PATH = '/usr/local/bin/docker'
     }
     
     stages {
@@ -26,9 +27,11 @@ pipeline {
         
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
-                }
+                sh '''
+                    which docker || echo "Docker not found"
+                    docker --version || echo "Docker version check failed"
+                    docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+                '''
             }
         }
         
