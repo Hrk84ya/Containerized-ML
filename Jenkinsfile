@@ -5,6 +5,7 @@ pipeline {
         DOCKER_IMAGE = 'containerized-ml'
         DOCKER_TAG = "${BUILD_NUMBER}"
         PYTHON_PATH = '/usr/local/bin/python3'
+        DOCKER_PATH = '/usr/local/bin/docker'
         DOCKER_HOST = 'unix:///var/run/docker.sock'
     }
     
@@ -29,13 +30,13 @@ pipeline {
             steps {
                 sh '''
                     # Check Docker installation
-                    if ! command -v docker &> /dev/null; then
-                        echo "Docker is not installed or not in PATH"
+                    if [ ! -x "${DOCKER_PATH}" ]; then
+                        echo "Docker is not installed or not executable at ${DOCKER_PATH}"
                         exit 1
                     fi
                     
                     # Check Docker daemon
-                    if ! docker info &> /dev/null; then
+                    if ! ${DOCKER_PATH} info &> /dev/null; then
                         echo "Docker daemon is not running or not accessible"
                         exit 1
                     fi
@@ -48,7 +49,7 @@ pipeline {
                     
                     # Build the image with detailed output
                     echo "Building Docker image..."
-                    DOCKER_HOST=${DOCKER_HOST} docker build --progress=plain -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+                    DOCKER_HOST=${DOCKER_HOST} ${DOCKER_PATH} build --progress=plain -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
                 '''
             }
         }
