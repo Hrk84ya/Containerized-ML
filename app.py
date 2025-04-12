@@ -10,6 +10,10 @@ with open("model.pkl", "rb") as f:
 
 app = Flask(__name__)
 
+@app.route("/health", methods=["GET"])
+def health_check():
+    return jsonify({"status": "healthy"})
+
 @app.route("/", methods=["GET"])
 def home():
     html = """
