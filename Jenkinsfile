@@ -22,10 +22,19 @@ pipeline {
         }
         
         stage('Test') {
+    parallel {
+        stage('Unit Tests') {
             steps {
-                sh '. venv/bin/activate && python3 -m pytest'
+                sh '. venv/bin/activate && pytest tests/unit'
             }
         }
+        stage('Integration Tests') {
+            steps {
+                sh '. venv/bin/activate && pytest tests/integration'
+            }
+        }
+    }
+}
         
         stage('Build Docker Image') {
     steps {
