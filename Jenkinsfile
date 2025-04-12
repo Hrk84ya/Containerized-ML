@@ -7,6 +7,7 @@ pipeline {
         PYTHON_PATH = '/usr/local/bin/python3'
         DOCKER_PATH = '/usr/local/bin/docker'
         DOCKER_HOST = 'unix:///var/run/docker.sock'
+        DOCKER_CONFIG = ''
     }
     
     stages {
@@ -49,7 +50,7 @@ pipeline {
                     
                     # Build the image with detailed output
                     echo "Building Docker image..."
-                    DOCKER_HOST=${DOCKER_HOST} ${DOCKER_PATH} build --progress=plain -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+                    DOCKER_HOST=${DOCKER_HOST} DOCKER_CONFIG=${DOCKER_CONFIG} ${DOCKER_PATH} build --progress=plain -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
                 '''
             }
         }
