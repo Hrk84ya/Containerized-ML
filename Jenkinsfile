@@ -29,30 +29,13 @@ pipeline {
         stage('Build Docker Image') {
     steps {
         sh '''
-            # Setup Docker config without credsStore
-            mkdir -p ~/.docker
-            echo '{ "credsStore": "" }' > ~/.docker/config.json
+            if ! docker info &> /dev/null; then
+                echo "❌ Docker is not running. Please start Docker Desktop and try again."
+                exit 1
+            fi
 
-            # Check Docker installation
-            if [ ! -x "${DOCKER_PATH}" ]; then
-                echo "Docker is not installed or not executable at ${DOCKER_PATH}"
-                exit 1
-            fi
-            
-            # Check Docker daemon
-            if ! ${DOCKER_PATH} info &> /dev/null; then
-                echo "Docker daemon is not running or not accessible"
-                exit 1
-            fi
-            
-            # Check Dockerfile existence
-            if [ ! -f "Dockerfile" ]; then
-                echo "Dockerfile not found in the workspace"
-                exit 1
-            fi
-            
-            echo "Building Docker image..."
-            DOCKER_HOST=${DOCKER_HOST} DOCKER_CONFIG=${DOCKER_CONFIG} ${DOCKER_PATH} build --progress=plain -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+            echo "✅ Docker is running. Building image..."
+            docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
         '''
     }
 }
