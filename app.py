@@ -25,6 +25,90 @@ def home():
         <title>House Price Predictor | ML Service</title>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
         <style>
+            body {
+                font-family: 'Inter', sans-serif;
+                background: linear-gradient(to right, #f8fafc, #e2e8f0);
+                color: #1e293b;
+                margin: 0;
+                padding: 2rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+            }
+
+            .container {
+                background: white;
+                border: 1px solid #e2e8f0;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+                border-radius: 12px;
+                padding: 2.5rem;
+                max-width: 720px;
+                width: 100%;
+            }
+
+            .header h1 {
+                font-size: 2.25rem;
+                margin-bottom: 0.5rem;
+                color: #0f172a;
+            }
+
+            .header p {
+                color: #64748b;
+                font-size: 1.1rem;
+                margin-bottom: 2rem;
+            }
+
+            .input-group label {
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+                color: #334155;
+            }
+
+            .input-group input {
+                padding: 0.75rem 1rem;
+                border-radius: 8px;
+                border: 1px solid #cbd5e1;
+                font-size: 1rem;
+                background-color: #f1f5f9;
+                transition: border-color 0.2s, background-color 0.2s;
+            }
+
+            .input-group input:focus {
+                border-color: #3b82f6;
+                background-color: white;
+                outline: none;
+            }
+
+            button {
+                background-color: #3b82f6;
+                color: white;
+                padding: 0.75rem 2rem;
+                border: none;
+                border-radius: 8px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            button:hover {
+                background-color: #2563eb;
+            }
+
+            #result.success {
+                background-color: #d1fae5;
+                color: #065f46;
+                border: 1px solid #10b981;
+            }
+
+            #result.error {
+                background-color: #fee2e2;
+                color: #991b1b;
+                border: 1px solid #f87171;
+            }
+
+            /* Retain other styles unchanged */
             :root {
                 --primary-color: #2563eb;
                 --primary-hover: #1d4ed8;
@@ -43,43 +127,7 @@ def home():
                 box-sizing: border-box;
             }
 
-            body {
-                font-family: 'Inter', sans-serif;
-                background-color: var(--background-color);
-                color: var(--text-primary);
-                line-height: 1.5;
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                padding: 2rem 1rem;
-            }
-
-            .container {
-                max-width: 800px;
-                width: 100%;
-                background: var(--card-background);
-                padding: 2rem;
-                border-radius: 1rem;
-                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            }
-
-            .header {
-                text-align: center;
-                margin-bottom: 2rem;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-                font-weight: 600;
-                color: var(--text-primary);
-                margin-bottom: 0.5rem;
-            }
-
-            .header p {
-                color: var(--text-secondary);
-                font-size: 1rem;
-            }
+            /* Remove previous body and container styles replaced above */
 
             .form-grid {
                 display: grid;
@@ -93,57 +141,12 @@ def home():
                 flex-direction: column;
             }
 
-            .input-group label {
-                font-size: 0.875rem;
-                font-weight: 500;
-                margin-bottom: 0.5rem;
-                color: var(--text-primary);
-            }
+            /* Remove previous input-group label and input styles replaced above */
 
-            .input-group input {
-                padding: 0.75rem;
-                border: 1px solid var(--border-color);
-                border-radius: 0.5rem;
-                font-size: 1rem;
-                transition: border-color 0.2s, box-shadow 0.2s;
-            }
-
-            .input-group input:focus {
-                outline: none;
-                border-color: var(--primary-color);
-                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-            }
-
-            .input-group input::placeholder {
-                color: var(--text-secondary);
-            }
+            /* Remove previous button styles replaced above */
 
             .button-container {
                 text-align: center;
-            }
-
-            button {
-                background-color: var(--primary-color);
-                color: white;
-                padding: 0.75rem 2rem;
-                border: none;
-                border-radius: 0.5rem;
-                font-size: 1rem;
-                font-weight: 500;
-                cursor: pointer;
-                transition: background-color 0.2s;
-                display: inline-flex;
-                align-items: center;
-                gap: 0.5rem;
-            }
-
-            button:hover {
-                background-color: var(--primary-hover);
-            }
-
-            button:disabled {
-                opacity: 0.7;
-                cursor: not-allowed;
             }
 
             .spinner {
@@ -170,17 +173,7 @@ def home():
                 display: none;
             }
 
-            .success {
-                background-color: #ecfdf5;
-                color: var(--success-color);
-                border: 1px solid #a7f3d0;
-            }
-
-            .error {
-                background-color: #fef2f2;
-                color: var(--error-color);
-                border: 1px solid #fecaca;
-            }
+            /* Remove previous success and error styles replaced above */
 
             @media (max-width: 640px) {
                 .container {
