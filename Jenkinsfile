@@ -6,8 +6,8 @@ pipeline {
     DOCKER_TAG = "${BUILD_NUMBER}"
     PYTHON_PATH = '/usr/local/bin/python3'
     DOCKER_PATH = '/usr/local/bin/docker'
-    DOCKER_CONFIG = ''
-    }
+    PATH = "/usr/local/bin:$PATH"
+}
     
     stages {
         stage('Setup') {
