@@ -68,7 +68,15 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    echo "🚀 Deploying container locally..."
+                    echo "🚀 Checking for existing containers using port 5050..."
+                    EXISTING_CONTAINER=$(docker ps --filter "publish=5050" --format "{{.ID}}")
+
+                    if [ ! -z "$EXISTING_CONTAINER" ]; then
+                        echo "🛑 Stopping existing container using port 5050..."
+                        docker stop $EXISTING_CONTAINER
+                    fi
+
+                    echo "🚀 Deploying container on port 5050..."
                     docker run -d --rm -p 5050:5050 ${DOCKER_IMAGE}:${DOCKER_TAG}
                 '''
             }
