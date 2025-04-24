@@ -25,6 +25,15 @@ pipeline {
                 sh '. venv/bin/activate && python3 -m pytest'
             }
         }
+
+        stage('Docker Check') {
+    steps {
+        sh '''
+            export DOCKER_HOST=unix:///Users/hrk84ya/Library/Containers/com.docker.docker/Data/docker-cli.sock
+            docker version
+        '''
+    }
+}
         
         stage('Build Docker Image') {
             steps {
