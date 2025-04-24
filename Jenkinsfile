@@ -35,20 +35,35 @@ pipeline {
 }
         
         stage('Build Docker Image') {
-            steps {
-                sh '''
-                    export DOCKER_HOST=unix:///Users/hrk84ya/Library/Containers/com.docker.docker/Data/docker-cli.sock
+    steps {
+        sh '''
+            # Setup Docker config without credsStore
+            mkdir -p ~/.docker
+            echo '{ "credsStore": "" }' > ~/.docker/config.json
 
-                    if ! docker info &> /dev/null; then
-                        echo "❌ Docker is not running or Docker socket not available to Jenkins."
-                        exit 1
-                    fi
-
-                    echo "✅ Docker is running. Proceeding to build the image..."
-                    docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
-                    '''
+            # Check Docker installation
+            if [ ! -x "${DOCKER_PATH}" ]; then
+                echo "Docker is not installed or not executable at ${DOCKER_PATH}"
+                exit 1
+            fi
+            
+            # Check Docker daemon (no custom DOCKER_HOST anymore)
+            if ! ${DOCKER_PATH} info &> /dev/null; then
+                echo "❌ Docker is not running or Docker socket not available to Jenkins."
+                exit 1
+            fi
+            
+            # Check Dockerfile existence
+            if [ ! -f "Dockerfile" ]; then
+                echo "Dockerfile not found in the workspace"
+                exit 1
+            fi
+            
+            echo "✅ Building Docker image..."
+            ${DOCKER_PATH} build --progress=plain -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+        '''
     }
-        }
+}
         
         stage('Deploy') {
             when {
