@@ -1,14 +1,14 @@
 pipeline {
     agent any
-    
+
     environment {
-    DOCKER_IMAGE = 'my-ml-app'
-    DOCKER_TAG = "${BUILD_NUMBER}"
-    PYTHON_PATH = '/usr/local/bin/python3'
-    DOCKER_PATH = '/usr/local/bin/docker'
-    PATH = "/usr/local/bin:$PATH"
-}
-    
+        DOCKER_IMAGE = 'my-ml-app'
+        DOCKER_TAG = "${BUILD_NUMBER}"
+        PYTHON_PATH = '/usr/local/bin/python3'
+        DOCKER_PATH = '/usr/local/bin/docker'
+        PATH = "/usr/local/bin:$PATH"
+    }
+
     stages {
         stage('Setup') {
             steps {
@@ -19,7 +19,7 @@ pipeline {
                 '''
             }
         }
-        
+
         stage('Test') {
             steps {
                 sh '. venv/bin/activate && python3 -m pytest'
@@ -27,44 +27,44 @@ pipeline {
         }
 
         stage('Docker Check') {
-    steps {
-        sh '''
-            docker version
-        '''
-    }
-}
-        
-        stage('Build Docker Image') {
-    steps {
-        sh '''            
-            # Setup Docker config without credsStore
-            mkdir -p ~/.docker
-            echo '{ "credsStore": "" }' > ~/.docker/config.json
+            steps {
+                sh '''
+                    docker version
+                '''
+            }
+        }
 
-            # Check Docker installation
-            if [ ! -x "${DOCKER_PATH}" ]; then
-                echo "Docker is not installed or not executable at ${DOCKER_PATH}"
-                exit 1
-            fi
-            
-            # Check Docker daemon
-            if ! ${DOCKER_PATH} info &> /dev/null; then
-                echo "❌ Docker is not running or Docker socket not available to Jenkins."
-                exit 1
-            fi
-            
-            # Check Dockerfile existence
-            if [ ! -f "Dockerfile" ]; then
-                echo "Dockerfile not found in the workspace"
-                exit 1
-            fi
-            
-            echo "✅ Building Docker image..."
-            ${DOCKER_PATH} build --progress=plain -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
-        '''
-    }
-}
-        
+        stage('Build Docker Image') {
+            steps {
+                sh '''            
+                    # Setup Docker config without credsStore
+                    mkdir -p ~/.docker
+                    echo '{ "credsStore": "" }' > ~/.docker/config.json
+
+                    # Check Docker installation
+                    if [ ! -x "${DOCKER_PATH}" ]; then
+                        echo "Docker is not installed or not executable at ${DOCKER_PATH}"
+                        exit 1
+                    fi
+
+                    # Check Docker daemon
+                    if ! ${DOCKER_PATH} info &> /dev/null; then
+                        echo "❌ Docker is not running or Docker socket not available to Jenkins."
+                        exit 1
+                    fi
+
+                    # Check Dockerfile existence
+                    if [ ! -f "Dockerfile" ]; then
+                        echo "Dockerfile not found in the workspace"
+                        exit 1
+                    fi
+
+                    echo "✅ Building Docker image..."
+                    ${DOCKER_PATH} build --progress=plain -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+                '''
+            }
+        }
+
         stage('Deploy') {
             steps {
                 sh '''
@@ -73,7 +73,8 @@ pipeline {
                 '''
             }
         }
-    
+    }
+
     post {
         always {
             cleanWs()
@@ -85,5 +86,4 @@ pipeline {
             echo 'Pipeline failed!'
         }
     }
-} 
 }
