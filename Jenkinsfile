@@ -29,7 +29,6 @@ pipeline {
         stage('Docker Check') {
     steps {
         sh '''
-            export DOCKER_HOST=unix:///Users/hrk84ya/Library/Containers/com.docker.docker/Data/docker-cli.sock
             docker version
         '''
     }
