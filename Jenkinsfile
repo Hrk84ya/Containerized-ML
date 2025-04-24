@@ -29,7 +29,6 @@ pipeline {
         stage('Docker Check') {
     steps {
         sh '''
-            export DOCKER_HOST=unix:///Users/hrk84ya/Library/Containers/com.docker.docker/Data/docker-cli.sock
             docker version
         '''
     }
@@ -37,10 +36,7 @@ pipeline {
         
         stage('Build Docker Image') {
     steps {
-        sh '''
-            # Ensure Docker can be accessed through the correct socket
-            export DOCKER_HOST=unix:///Users/hrk84ya/Library/Containers/com.docker.docker/Data/docker-cli.sock
-            
+        sh '''            
             # Setup Docker config without credsStore
             mkdir -p ~/.docker
             echo '{ "credsStore": "" }' > ~/.docker/config.json
