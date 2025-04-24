@@ -2,12 +2,11 @@ pipeline {
     agent any
     
     environment {
-        DOCKER_IMAGE = 'containerized-ml'
-        DOCKER_TAG = "${BUILD_NUMBER}"
-        PYTHON_PATH = '/usr/local/bin/python3'
-        DOCKER_PATH = '/usr/local/bin/docker'
-        DOCKER_HOST = 'unix:///var/run/docker.sock'
-        DOCKER_CONFIG = ''
+    DOCKER_IMAGE = 'containerized-ml'
+    DOCKER_TAG = "${BUILD_NUMBER}"
+    PYTHON_PATH = '/usr/local/bin/python3'
+    DOCKER_PATH = '/usr/local/bin/docker'
+    DOCKER_CONFIG = ''
     }
     
     stages {
