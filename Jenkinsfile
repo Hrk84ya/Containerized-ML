@@ -29,6 +29,7 @@ pipeline {
         stage('Docker Check') {
     steps {
         sh '''
+            export DOCKER_HOST=unix:///Users/hrk84ya/Library/Containers/com.docker.docker/Data/docker-cli.sock
             docker version
         '''
     }
@@ -37,6 +38,9 @@ pipeline {
         stage('Build Docker Image') {
     steps {
         sh '''
+            # Ensure Docker can be accessed through the correct socket
+            export DOCKER_HOST=unix:///Users/hrk84ya/Library/Containers/com.docker.docker/Data/docker-cli.sock
+            
             # Setup Docker config without credsStore
             mkdir -p ~/.docker
             echo '{ "credsStore": "" }' > ~/.docker/config.json
@@ -47,7 +51,7 @@ pipeline {
                 exit 1
             fi
             
-            # Check Docker daemon (no custom DOCKER_HOST anymore)
+            # Check Docker daemon
             if ! ${DOCKER_PATH} info &> /dev/null; then
                 echo "❌ Docker is not running or Docker socket not available to Jenkins."
                 exit 1
