@@ -66,16 +66,13 @@ pipeline {
 }
         
         stage('Deploy') {
-            when {
-                branch 'main'
-            }
-            steps {
-                script {
-                    echo "Deploying version ${DOCKER_TAG}"
-                }
-            }
-        }
+    steps {
+        sh '''
+            echo "🚀 Deploying container locally..."
+            docker run -d --rm -p 5050:5050 ${DOCKER_IMAGE}:${DOCKER_TAG}
+        '''
     }
+}
     
     post {
         always {
