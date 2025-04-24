@@ -27,18 +27,20 @@ pipeline {
         }
         
         stage('Build Docker Image') {
-    steps {
-        sh '''
-            if ! docker info &> /dev/null; then
-                echo "❌ Docker is not running. Please start Docker Desktop and try again."
-                exit 1
-            fi
+            steps {
+                sh '''
+                    export DOCKER_HOST=unix:///Users/hrk84ya/Library/Containers/com.docker.docker/Data/docker-cli.sock
 
-            echo "✅ Docker is running. Building image..."
-            docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
-        '''
+                    if ! docker info &> /dev/null; then
+                        echo "❌ Docker is not running or Docker socket not available to Jenkins."
+                        exit 1
+                    fi
+
+                    echo "✅ Docker is running. Proceeding to build the image..."
+                    docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+                    '''
     }
-}
+        }
         
         stage('Deploy') {
             when {
