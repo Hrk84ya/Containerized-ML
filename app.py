@@ -200,7 +200,7 @@ def home():
     <body>
         <div class="container">
             <div class="header">
-                <h1>House Price Predictor</h1>
+                <h1>House Price Predictor 2.0</h1>
                 <p>Enter the house details below to get an accurate price prediction</p>
             </div>
             <div class="form-grid">
