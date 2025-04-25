@@ -49,7 +49,7 @@ pipeline {
 
                     # Check Docker daemon
                     if ! ${DOCKER_PATH} info &> /dev/null; then
-                        echo "❌ Docker is not running or Docker socket not available to Jenkins."
+                        echo "Docker is not running or Docker socket not available to Jenkins."
                         exit 1
                     fi
 
@@ -59,7 +59,7 @@ pipeline {
                         exit 1
                     fi
 
-                    echo "✅ Building Docker image..."
+                    echo "Building Docker image..."
                     ${DOCKER_PATH} build --progress=plain -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
                 '''
             }
@@ -68,15 +68,15 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    echo "🚀 Checking for existing containers using port 5050..."
+                    echo "Checking for existing containers using port 5050..."
                     EXISTING_CONTAINER=$(docker ps --filter "publish=5050" --format "{{.ID}}")
 
                     if [ ! -z "$EXISTING_CONTAINER" ]; then
-                        echo "🛑 Stopping existing container using port 5050..."
+                        echo "Stopping existing container using port 5050..."
                         docker stop $EXISTING_CONTAINER
                     fi
 
-                    echo "🚀 Deploying container on port 5050..."
+                    echo "Deploying container on port 5050..."
                     docker run -d --rm -p 5050:5050 ${DOCKER_IMAGE}:${DOCKER_TAG}
                 '''
             }
